@@ -1,13 +1,19 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
 
 import { HelloWave } from '@/components/hello-wave';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { Button, ButtonText } from '@gluestack-ui/themed';
+import { getCurrentUser, logout } from '@/api/auth';
 
 export default function HomeScreen() {
+  const router = useRouter();
+  const user = getCurrentUser();
+  if (!user) return null;
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -18,8 +24,19 @@ export default function HomeScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
+        <ThemedText type="title">Welcome, {user.name}!</ThemedText>
         <HelloWave />
+      </ThemedView>
+      <ThemedView style={styles.signOutContainer}>
+        <Button
+          variant="outline"
+          action="negative"
+          onPress={() => {
+            logout();
+            router.replace('/auth');
+          }}>
+          <ButtonText>Sign out</ButtonText>
+        </Button>
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -30,6 +47,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+  },
+  signOutContainer: {
+    marginTop: 16,
+    alignItems: 'flex-start',
   },
   stepContainer: {
     gap: 8,

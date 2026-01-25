@@ -1,11 +1,14 @@
+import { useEffect, useState } from 'react';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
+import { Stack, useRootNavigationState, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GluestackUIProvider } from '@gluestack-ui/themed';
 import { config as gluestackConfig } from '@gluestack-ui/config';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { getCurrentUser } from '@/api/auth';
+import { pocketBaseClient } from '@/api/pocketbase';
 
 import '@/global.css';
 
@@ -15,6 +18,39 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const router = useRouter();
+  const segments = useSegments();
+  const rootNavigationState = useRootNavigationState();
+  const [user, setUser] = useState(getCurrentUser());
+  const [navReady, setNavReady] = useState(false);
+
+  useEffect(() => {
+    if (rootNavigationState?.key && segments.length > 0) {
+      setNavReady(true);
+    }
+  }, [rootNavigationState?.key, segments.length]);
+
+  useEffect(() => {
+    const unsubscribe = pocketBaseClient.authStore.onChange(() => {
+      setUser(getCurrentUser());
+    });
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    if (!navReady) return;
+    const isInAuth = segments[0] === 'auth';
+
+    if (!user && !isInAuth) {
+      router.replace('/auth');
+    } else if (user && isInAuth) {
+      router.replace('/(tabs)');
+    }
+  }, [user, router, segments, navReady]);
+
+  if (!navReady) {
+    return null;
+  }
 
   return (
     <GluestackUIProvider config={gluestackConfig}>
