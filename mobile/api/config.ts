@@ -1,4 +1,4 @@
-const DEFAULT_POCKETBASE_URL = 'http://127.0.0.1:8090';
+const DEFAULT_POCKETBASE_URL = 'http://10.0.2.2:8090';
 
 /**
  * Base URL for the PocketBase instance. Prefer an Expo public env so it is

@@ -25,10 +25,11 @@ export default function RootLayout() {
   const [navReady, setNavReady] = useState(false);
 
   useEffect(() => {
-    if (rootNavigationState?.key && segments.length > 0) {
+    // On native, segments can stay empty until after first paint; only require navigation state.
+    if (rootNavigationState?.key) {
       setNavReady(true);
     }
-  }, [rootNavigationState?.key, segments.length]);
+  }, [rootNavigationState?.key]);
 
   useEffect(() => {
     const unsubscribe = pocketBaseClient.authStore.onChange(() => {
