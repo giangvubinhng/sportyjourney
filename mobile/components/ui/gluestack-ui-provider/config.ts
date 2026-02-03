@@ -1,20 +1,51 @@
 'use client';
 import { vars } from 'nativewind';
 
+/** App primary color #1fa358 (RGB 31, 163, 88) – green scale for light/dark theme */
+const PRIMARY_LIGHT = {
+  0: '248 252 249',
+  50: '236 247 238',
+  100: '220 240 226',
+  200: '188 224 200',
+  300: '148 205 168',
+  400: '88 183 124',
+  500: '31 163 88', // #1fa358
+  600: '26 140 74',
+  700: '22 116 61',
+  800: '17 92 48',
+  900: '13 69 36',
+  950: '9 48 25',
+};
+
+const PRIMARY_DARK = {
+  0: '9 48 25',
+  50: '13 69 36',
+  100: '17 92 48',
+  200: '22 116 61',
+  300: '26 140 74',
+  400: '31 163 88', // #1fa358
+  500: '52 180 115',
+  600: '88 196 148',
+  700: '148 218 182',
+  800: '188 232 210',
+  900: '220 243 232',
+  950: '248 252 249',
+};
+
 export const config = {
   light: vars({
-    '--color-primary-0': '179 179 179',
-    '--color-primary-50': '153 153 153',
-    '--color-primary-100': '128 128 128',
-    '--color-primary-200': '115 115 115',
-    '--color-primary-300': '102 102 102',
-    '--color-primary-400': '82 82 82',
-    '--color-primary-500': '51 51 51',
-    '--color-primary-600': '41 41 41',
-    '--color-primary-700': '31 31 31',
-    '--color-primary-800': '13 13 13',
-    '--color-primary-900': '10 10 10',
-    '--color-primary-950': '8 8 8',
+    '--color-primary-0': PRIMARY_LIGHT[0],
+    '--color-primary-50': PRIMARY_LIGHT[50],
+    '--color-primary-100': PRIMARY_LIGHT[100],
+    '--color-primary-200': PRIMARY_LIGHT[200],
+    '--color-primary-300': PRIMARY_LIGHT[300],
+    '--color-primary-400': PRIMARY_LIGHT[400],
+    '--color-primary-500': PRIMARY_LIGHT[500],
+    '--color-primary-600': PRIMARY_LIGHT[600],
+    '--color-primary-700': PRIMARY_LIGHT[700],
+    '--color-primary-800': PRIMARY_LIGHT[800],
+    '--color-primary-900': PRIMARY_LIGHT[900],
+    '--color-primary-950': PRIMARY_LIGHT[950],
 
     /* Secondary  */
     '--color-secondary-0': '253 253 253',
@@ -155,18 +186,18 @@ export const config = {
     '--color-indicator-error': '185 28 28',
   }),
   dark: vars({
-    '--color-primary-0': '166 166 166',
-    '--color-primary-50': '175 175 175',
-    '--color-primary-100': '186 186 186',
-    '--color-primary-200': '197 197 197',
-    '--color-primary-300': '212 212 212',
-    '--color-primary-400': '221 221 221',
-    '--color-primary-500': '230 230 230',
-    '--color-primary-600': '240 240 240',
-    '--color-primary-700': '250 250 250',
-    '--color-primary-800': '253 253 253',
-    '--color-primary-900': '254 249 249',
-    '--color-primary-950': '253 252 252',
+    '--color-primary-0': PRIMARY_DARK[0],
+    '--color-primary-50': PRIMARY_DARK[50],
+    '--color-primary-100': PRIMARY_DARK[100],
+    '--color-primary-200': PRIMARY_DARK[200],
+    '--color-primary-300': PRIMARY_DARK[300],
+    '--color-primary-400': PRIMARY_DARK[400],
+    '--color-primary-500': PRIMARY_DARK[500],
+    '--color-primary-600': PRIMARY_DARK[600],
+    '--color-primary-700': PRIMARY_DARK[700],
+    '--color-primary-800': PRIMARY_DARK[800],
+    '--color-primary-900': PRIMARY_DARK[900],
+    '--color-primary-950': PRIMARY_DARK[950],
 
     /* Secondary  */
     '--color-secondary-0': '20 20 20',

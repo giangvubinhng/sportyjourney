@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, useRootNavigationState, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { GluestackUIProvider } from '@gluestack-ui/themed';
+import { GluestackUIProvider as ThemedProvider } from '@gluestack-ui/themed';
 import { config as gluestackConfig } from '@gluestack-ui/config';
 import 'react-native-reanimated';
 
+import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { getCurrentUser } from '@/api/auth';
 import { pocketBaseClient } from '@/api/pocketbase';
@@ -53,16 +54,20 @@ export default function RootLayout() {
     return null;
   }
 
+  const themeMode = colorScheme === 'dark' ? 'dark' : 'light';
+
   return (
-    <GluestackUIProvider config={gluestackConfig}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="auth" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-        </Stack>
-        <StatusBar style="auto" />
-      </ThemeProvider>
+    <GluestackUIProvider mode={themeMode}>
+      <ThemedProvider config={gluestackConfig}>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="auth" options={{ headerShown: false }} />
+            <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+          </Stack>
+          <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+        </ThemeProvider>
+      </ThemedProvider>
     </GluestackUIProvider>
   );
 }

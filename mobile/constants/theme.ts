@@ -1,41 +1,58 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * App theme: single source for navigation/tab colors and typography.
+ * Primary color: #1fa358. Supports light and dark mode.
  */
 
 import { Platform } from 'react-native';
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+/** App primary color (green) */
+export const PRIMARY_COLOR = '#1fa358';
 
-export const Colors = {
+export type ColorScheme = 'light' | 'dark';
+
+export const Colors: Record<
+  ColorScheme,
+  {
+    text: string;
+    textMuted: string;
+    background: string;
+    cardBackground: string;
+    cardBorder: string;
+    tint: string;
+    icon: string;
+    tabIconDefault: string;
+    tabIconSelected: string;
+  }
+> = {
   light: {
     text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
+    textMuted: '#687076',
+    background: '#ffffff',
+    cardBackground: '#f5f5f5',
+    cardBorder: '#e5e5e5',
+    tint: PRIMARY_COLOR,
     icon: '#687076',
     tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    tabIconSelected: PRIMARY_COLOR,
   },
   dark: {
     text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
+    textMuted: '#9BA1A6',
+    background: '#121212',
+    cardBackground: '#1e1e1e',
+    cardBorder: '#2d2d2d',
+    tint: PRIMARY_COLOR,
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    tabIconSelected: PRIMARY_COLOR,
   },
 };
 
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
     sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
     serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
     rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
     mono: 'ui-monospace',
   },
   default: {

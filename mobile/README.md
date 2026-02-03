@@ -1,16 +1,18 @@
-# Welcome to your Expo app 👋
+# Sportbook
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app). You need the Bun runtime.
+BJJ session tracking app (Expo + PocketBase). Supports **light and dark theme** with primary color **#1fa358**.
 
 ## Get started
 
-1. Install dependencies
+1. **Install dependencies**
 
    ```bash
    bun install
    ```
 
-2. Start the app
+2. **Environment** – Copy `.env.example` to `.env` and set `EXPO_PUBLIC_POCKETBASE_URL` (e.g. `http://192.168.1.x:8090` for device; `http://10.0.2.2:8090` for Android emulator).
+
+3. **Start the app**
 
    ```bash
    bun run start
@@ -22,6 +24,8 @@ In the output, you'll find options to open the app in a
 - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+
+Project structure: **`app/`** (screens), **`api/`** (PocketBase, auth, sessions), **`components/`** (UI), **`constants/`** (theme), **`lib/`** (form/validation), **`types/`** (shared types). See **`docs/ARCHITECTURE.md`** for architecture and onboarding.
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
