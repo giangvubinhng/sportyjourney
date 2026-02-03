@@ -3,6 +3,7 @@ import { Formik } from 'formik';
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 
+import ScreenLayout from '@/components/screen-layout';
 import { Center } from '@/components/ui/center';
 import DatePicker from '@/components/ui/date-picker';
 import {
@@ -18,7 +19,11 @@ import {
   SliderTrack,
 } from '@/components/ui/slider';
 import { Textarea, TextareaInput } from '@/components/ui/textarea';
-import { Box, Button, ButtonText, Spinner, Text, VStack } from '@gluestack-ui/themed';
+import { Box } from '@/components/ui/box';
+import { Button, ButtonText } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+import { Text } from '@/components/ui/text';
+import { VStack } from '@/components/ui/vstack';
 
 import { getCurrentUser } from '@/api/auth';
 import { createSession } from '@/api/sessions';
@@ -65,6 +70,7 @@ export default function AddSessionScreen() {
   };
 
   return (
+    <ScreenLayout title="Add session" description="Log a BJJ training session.">
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       style={{ flex: 1, backgroundColor: colors.background }}>
@@ -72,14 +78,7 @@ export default function AddSessionScreen() {
         contentContainerStyle={{ paddingBottom: 48 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled">
-        <Box px="$5" pt="$8" pb="$4" style={{ backgroundColor: colors.background }}>
-          <Text size="xl" fontWeight="$semibold" mb="$1" style={{ color: colors.text }}>
-            Add session
-          </Text>
-          <Text size="sm" mb="$6" style={{ color: colors.textMuted }}>
-            Log a BJJ training session.
-          </Text>
-
+        <Box style={{ paddingHorizontal: 20, paddingTop: 32, paddingBottom: 16, backgroundColor: colors.background }}>
           <Formik
             initialValues={getDefaultSessionFormValues()}
             validate={validateSessionForm}
@@ -121,22 +120,20 @@ export default function AddSessionScreen() {
                     )}
                   </FormControl>
 
-<FormControl>
-
-                  {/* Date */}
-                  <FormControlLabel>
-                    <FormControlLabelText>Date *</FormControlLabelText>
-                  </FormControlLabel>
-                  <DatePicker
-                    value={values.date}
-                    onChange={(iso) => setFieldValue('date', iso)}
-                    onBlur={() => setFieldTouched('date')}
-                  />
-
-</FormControl>
+                  <FormControl>
+                    {/* Date */}
+                    <FormControlLabel>
+                      <FormControlLabelText>Date *</FormControlLabelText>
+                    </FormControlLabel>
+                    <DatePicker
+                      value={values.date}
+                      onChange={(iso) => setFieldValue('date', iso)}
+                      onBlur={() => setFieldTouched('date')}
+                    />
+                  </FormControl>
                   {/* Duration */}
                   <FormControl>
-                    <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb="$2">
+                    <Box style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                       <FormControlLabel>
                         <FormControlLabelText className="text-typography-900 font-medium">
                           Duration *
@@ -144,7 +141,7 @@ export default function AddSessionScreen() {
                       </FormControlLabel>
                       <Box
                         className="bg-primary-500 px-3 py-1 rounded-full min-w-[56px] items-center">
-                        <Text size="sm" fontWeight="$semibold" className="text-typography-0">
+                        <Text size="sm" bold className="text-typography-0">
                           {durationNum} min
                         </Text>
                       </Box>
@@ -170,7 +167,7 @@ export default function AddSessionScreen() {
 
                   {/* Energy */}
                   <FormControl>
-                    <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb="$2">
+                    <Box style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                       <FormControlLabel>
                         <FormControlLabelText className="text-typography-900 font-medium">
                           Energy *
@@ -178,7 +175,7 @@ export default function AddSessionScreen() {
                       </FormControlLabel>
                       <Box
                         className="bg-primary-500 px-3 py-1 rounded-full min-w-[56px] items-center">
-                        <Text size="sm" fontWeight="$semibold" className="text-typography-0">
+                        <Text size="sm" bold className="text-typography-0">
                           {energyNum} / {ENERGY_MAX}
                         </Text>
                       </Box>
@@ -223,10 +220,10 @@ export default function AddSessionScreen() {
 
                   {submitError && (
                     <Box
-                      borderRadius="$md"
-                      px="$4"
-                      py="$3"
                       style={{
+                        borderRadius: 8,
+                        paddingHorizontal: 16,
+                        paddingVertical: 12,
                         backgroundColor: '#FEE2E2',
                         borderWidth: 1,
                         borderColor: '#EF4444',
@@ -239,9 +236,7 @@ export default function AddSessionScreen() {
 
                   <Button
                     size="lg"
-                    borderRadius="$lg"
-                    mt="$2"
-                    style={{ backgroundColor: colors.tint }}
+                    style={{ backgroundColor: colors.tint, borderRadius: 8, marginTop: 8 }}
                     onPress={() => handleSubmit()}
                     isDisabled={isSubmitting}>
                     {isSubmitting ? (
@@ -257,5 +252,6 @@ export default function AddSessionScreen() {
         </Box>
       </ScrollView>
     </KeyboardAvoidingView>
+</ScreenLayout>
   );
 }

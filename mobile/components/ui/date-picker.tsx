@@ -1,4 +1,6 @@
-import { Box, Pressable, Text } from '@gluestack-ui/themed';
+import { Box } from '@/components/ui/box';
+import { Pressable } from '@/components/ui/pressable';
+import { Text } from '@/components/ui/text';
 import DateTimePicker, {
   type DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
@@ -39,20 +41,29 @@ export default function DatePicker({
       onChange(selectedDate.toISOString().slice(0, 10));
     }
   };
+  const handlePress = () => {
+    if(!show){
+      onBlur();
+    }
+    setShow(!show);
+  };
 
   return (
     <>
-      <Pressable onPress={() => { onBlur(); setShow(true); }}>
+      <Pressable onPress={handlePress}>
         <Box
-          borderWidth={1}
-          borderRadius="$lg"
-          px="$4"
-          py="$3"
-          flexDirection="row"
-          alignItems="center"
-          justifyContent="space-between"
-          mt="$1"
-          style={{ backgroundColor: colors.cardBackground, borderColor: colors.cardBorder }}>
+          style={{
+            borderWidth: 1,
+            borderRadius: 12,
+            paddingHorizontal: 16,
+            paddingVertical: 12,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginTop: 4,
+            backgroundColor: colors.cardBackground,
+            borderColor: colors.cardBorder,
+          }}>
           <Text size="md" style={{ color: colors.text }}>
             {value ? formatDateDisplay(value) : 'Select date'}
           </Text>
@@ -64,7 +75,7 @@ export default function DatePicker({
       {show && (
         <>
           {Platform.OS === 'ios' ? (
-            <Box mt="$2">
+            <Box style={{ marginTop: 8 }}>
               <DateTimePicker
                 value={dateObj}
                 mode="date"
@@ -72,8 +83,8 @@ export default function DatePicker({
                 onChange={handleChange}
               />
               <Pressable onPress={() => setShow(false)} style={{ marginTop: 8 }}>
-                <Box py="$2" borderRadius="$md" style={{ backgroundColor: colors.cardBackground }}>
-                  <Text textAlign="center" fontWeight="$semibold" style={{ color: colors.tint }}>
+                <Box style={{ paddingVertical: 8, borderRadius: 8, backgroundColor: colors.cardBackground }}>
+                  <Text bold style={{ color: colors.tint, textAlign: 'center' }}>
                     Done
                   </Text>
                 </Box>

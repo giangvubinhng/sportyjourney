@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, useRootNavigationState, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { GluestackUIProvider as ThemedProvider } from '@gluestack-ui/themed';
-import { config as gluestackConfig } from '@gluestack-ui/config';
+import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { getCurrentUser } from '@/api/auth';
 import { pocketBaseClient } from '@/api/pocketbase';
+import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 
 import '@/global.css';
 
@@ -57,8 +56,8 @@ export default function RootLayout() {
   const themeMode = colorScheme === 'dark' ? 'dark' : 'light';
 
   return (
-    <GluestackUIProvider mode={themeMode}>
-      <ThemedProvider config={gluestackConfig}>
+    <SafeAreaProvider>
+      <GluestackUIProvider mode={themeMode}>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -67,7 +66,7 @@ export default function RootLayout() {
           </Stack>
           <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
         </ThemeProvider>
-      </ThemedProvider>
-    </GluestackUIProvider>
+      </GluestackUIProvider>
+    </SafeAreaProvider>
   );
 }

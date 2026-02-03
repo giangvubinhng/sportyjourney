@@ -1,14 +1,18 @@
-import { useCallback, useEffect, useState } from 'react';
-import { RefreshControl, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
-
-import { Box, Button, ButtonText, Heading, Text, VStack } from '@gluestack-ui/themed';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { getCurrentUser, logout } from '@/api/auth';
 import type { SessionRecord } from '@/api/sessions';
 import { listSessions } from '@/api/sessions';
+import ScreenLayout from '@/components/screen-layout';
+import { Box } from '@/components/ui/box';
+import { IconSymbol } from '@/components/ui/icon-symbol';
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Button, ButtonText } from '@/components/ui/button';
+import { Heading } from '@/components/ui/heading';
+import { Text } from '@/components/ui/text';
+import { VStack } from '@/components/ui/vstack';
+import { useRouter } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
+import { RefreshControl, ScrollView } from 'react-native';
 
 function formatSessionDate(iso: string): string {
   const d = new Date(iso);
@@ -37,19 +41,16 @@ function SessionCard({
 }) {
   return (
     <Box
-      borderRadius="$lg"
-      p="$4"
-      borderWidth={1}
-      style={{ backgroundColor: colors.cardBackground, borderColor: colors.cardBorder }}>
-      <Box flexDirection="row" justifyContent="space-between" alignItems="flex-start">
-        <Text fontWeight="$semibold" size="md" style={{ color: colors.text }}>
+      style={{ backgroundColor: colors.cardBackground, borderColor: colors.cardBorder, borderRadius: 16 }}>
+      <Box style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <Text bold size="md" style={{ color: colors.text }}>
           {session.name || formatSessionDate(session.date)}
         </Text>
         <Text size="sm" style={{ color: colors.textMuted }}>
           {session.duration} min
         </Text>
       </Box>
-      <Box flexDirection="row" alignItems="center" mt="$1" gap="$2">
+      <Box style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 8 }}>
         <Text size="sm" style={{ color: colors.textMuted }}>
           {formatSessionDate(session.date)}
         </Text>
@@ -61,7 +62,7 @@ function SessionCard({
         </Text>
       </Box>
       {session.note?.trim() ? (
-        <Text size="sm" mt="$2" numberOfLines={2} style={{ color: colors.textMuted }}>
+        <Text size="sm" numberOfLines={2} style={{ color: colors.textMuted, marginTop: 8 }}>
           {session.note}
         </Text>
       ) : null}
@@ -103,14 +104,14 @@ export default function HomeScreen() {
   if (!user) return null;
 
   return (
+    <ScreenLayout title="Home">
     <ScrollView
-      style={{ flex: 1, backgroundColor: colors.background }}
       contentContainerStyle={{ flexGrow: 1 }}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.tint} />
       }>
-      <Box flex={1} px="$6" py="$8" style={{ backgroundColor: colors.background }}>
-        <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb="$6">
+      <Box style={{ flex: 1, paddingHorizontal: 16, backgroundColor: colors.background }}>
+        <Box style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
           <VStack space="xs">
             <Heading size="2xl" style={{ color: colors.text }}>
               Hey, {user.name || user.username || 'there'}
@@ -130,19 +131,14 @@ export default function HomeScreen() {
         </Box>
 
         {loading ? (
-          <Box py="$12" alignItems="center">
+          <Box style={{ paddingVertical: 48, alignItems: 'center' }}>
             <Text style={{ color: colors.textMuted }}>Loading sessions…</Text>
           </Box>
         ) : sessions.length === 0 ? (
           <Box
-            py="$12"
-            alignItems="center"
-            borderRadius="$xl"
-            borderWidth={1}
-            borderStyle="dashed"
-            style={{ backgroundColor: colors.cardBackground, borderColor: colors.cardBorder }}>
+            style={{ borderRadius: 16, borderWidth: 1, borderStyle: 'dashed', backgroundColor: colors.cardBackground, borderColor: colors.cardBorder }}>
             <IconSymbol name="calendar.badge.plus" size={48} color={colors.textMuted} />
-            <Text mt="$4" textAlign="center" style={{ color: colors.textMuted }}>
+            <Text style={{ marginTop: 16, textAlign: 'center', color: colors.textMuted }}>
               No sessions yet. Add your first one from the Add Session tab.
             </Text>
           </Box>
@@ -155,5 +151,7 @@ export default function HomeScreen() {
         )}
       </Box>
     </ScrollView>
+
+    </ScreenLayout>
   );
 }

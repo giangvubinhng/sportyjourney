@@ -3,24 +3,22 @@ import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Formik } from 'formik';
 import { useRouter } from 'expo-router';
 
+import { Box } from '@/components/ui/box';
+import { Button, ButtonText } from '@/components/ui/button';
 import {
-  Box,
-  Button,
-  ButtonText,
   FormControl,
   FormControlError,
   FormControlErrorText,
   FormControlLabel,
   FormControlLabelText,
-  Heading,
-  HStack,
-  Input,
-  InputField,
-  Pressable,
-  Spinner,
-  Text,
-  VStack,
-} from '@gluestack-ui/themed';
+} from '@/components/ui/form-control';
+import { Heading } from '@/components/ui/heading';
+import { HStack } from '@/components/ui/hstack';
+import { Input, InputField } from '@/components/ui/input';
+import { Pressable } from '@/components/ui/pressable';
+import { Spinner } from '@/components/ui/spinner';
+import { Text } from '@/components/ui/text';
+import { VStack } from '@/components/ui/vstack';
 
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -70,7 +68,7 @@ export default function AuthScreen() {
         contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingVertical: 40 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled">
-        <Box px="$6" py="$8" style={{ backgroundColor: colors.background }}>
+        <Box style={{ paddingHorizontal: 24, paddingVertical: 32, backgroundColor: colors.background }}>
           <Formik
             initialValues={initialValues}
             validate={(v) => validate(v, isSignup)}
@@ -118,37 +116,38 @@ export default function AuthScreen() {
 
               return (
                 <Box
-                  borderRadius="$2xl"
-                  p="$6"
                   style={{
+                    borderRadius: 24,
+                    padding: 24,
                     backgroundColor: colors.cardBackground,
                     borderWidth: 1,
                     borderColor: colors.cardBorder,
                   }}>
                   {/* Mode toggle */}
                   <HStack
-                    borderRadius="$xl"
-                    p="$1"
-                    style={{ backgroundColor: colors.background }}
-                    mb="$6">
+                    style={{
+                      borderRadius: 16,
+                      padding: 4,
+                      marginBottom: 24,
+                      backgroundColor: colors.background,
+                    }}>
                     {(['login', 'signup'] as const).map((item) => {
                       const active = mode === item;
                       return (
                         <Pressable
                           key={item}
                           onPress={() => setModeDirect(item)}
-                          flex={1}
-                          borderRadius="$lg">
+                          style={{ flex: 1, borderRadius: 8 }}>
                           <Box
-                            borderRadius="$lg"
-                            px="$4"
-                            py="$3"
-                            alignItems="center"
                             style={{
+                              borderRadius: 8,
+                              paddingHorizontal: 16,
+                              paddingVertical: 12,
+                              alignItems: 'center',
                               backgroundColor: active ? colors.tint : 'transparent',
                             }}>
                             <Text
-                              fontWeight="$semibold"
+                              bold
                               size="sm"
                               style={{
                                 color: active ? '#fff' : colors.textMuted,
@@ -161,10 +160,10 @@ export default function AuthScreen() {
                     })}
                   </HStack>
 
-                  <Heading size="xl" mb="$1" style={{ color: colors.text }}>
+                  <Heading size="xl" style={{ color: colors.text, marginBottom: 4 }}>
                     {isSignup ? 'Create account' : 'Welcome back'}
                   </Heading>
-                  <Text size="sm" mb="$6" style={{ color: colors.textMuted }}>
+                  <Text size="sm" style={{ color: colors.textMuted, marginBottom: 24 }}>
                     {isSignup
                       ? 'Sign up to start tracking your BJJ journey.'
                       : 'Log in to continue where you left off.'}
@@ -181,8 +180,7 @@ export default function AuthScreen() {
                         <Input
                           variant="outline"
                           size="lg"
-                          borderRadius="$lg"
-                          style={{ borderColor: colors.cardBorder, backgroundColor: colors.background }}>
+                          style={{ borderRadius: 8, borderColor: colors.cardBorder, backgroundColor: colors.background }}>
                           <InputField
                             value={values.name}
                             onChangeText={(t) => setFieldValue('name', t)}
@@ -206,8 +204,8 @@ export default function AuthScreen() {
                       <Input
                         variant="outline"
                         size="lg"
-                        borderRadius="$lg"
                         style={{
+                          borderRadius: 8,
                           borderColor: touched.email && errors.email ? undefined : colors.cardBorder,
                           backgroundColor: colors.background,
                         }}>
@@ -240,8 +238,8 @@ export default function AuthScreen() {
                       <Input
                         variant="outline"
                         size="lg"
-                        borderRadius="$lg"
                         style={{
+                          borderRadius: 8,
                           borderColor: touched.password && errors.password ? undefined : colors.cardBorder,
                           backgroundColor: colors.background,
                         }}>
@@ -274,8 +272,8 @@ export default function AuthScreen() {
                         <Input
                           variant="outline"
                           size="lg"
-                          borderRadius="$lg"
                           style={{
+                            borderRadius: 8,
                             borderColor:
                               touched.passwordConfirm && errors.passwordConfirm
                                 ? undefined
@@ -306,9 +304,9 @@ export default function AuthScreen() {
 
                     {authError && (
                       <Box
-                        borderRadius="$lg"
-                        p="$3"
                         style={{
+                          borderRadius: 8,
+                          padding: 12,
                           backgroundColor: '#FEE2E2',
                           borderWidth: 1,
                           borderColor: '#EF4444',
@@ -321,9 +319,7 @@ export default function AuthScreen() {
 
                     <Button
                       size="lg"
-                      borderRadius="$lg"
-                      mt="$2"
-                      style={{ backgroundColor: colors.tint }}
+                      style={{ backgroundColor: colors.tint, borderRadius: 8, marginTop: 8 }}
                       onPress={() => handleSubmit()}
                       isDisabled={isSubmitting}>
                       {isSubmitting ? (
@@ -336,12 +332,12 @@ export default function AuthScreen() {
                     </Button>
                   </VStack>
 
-                  <HStack justifyContent="center" mt="$6" flexWrap="wrap" gap="$1">
+                  <HStack style={{ justifyContent: 'center', marginTop: 24, flexWrap: 'wrap', gap: 4 }}>
                     <Text size="sm" style={{ color: colors.textMuted }}>
                       {isSignup ? 'Already have an account?' : "Don't have an account?"}
                     </Text>
                     <Pressable onPress={() => setModeDirect(isSignup ? 'login' : 'signup')}>
-                      <Text size="sm" fontWeight="$semibold" style={{ color: colors.tint }}>
+                      <Text size="sm" bold style={{ color: colors.tint }}>
                         {isSignup ? 'Log in' : 'Sign up'}
                       </Text>
                     </Pressable>
