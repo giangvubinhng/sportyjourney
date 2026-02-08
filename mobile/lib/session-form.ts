@@ -87,7 +87,7 @@ export function validateSessionForm(values: SessionFormValues): SessionFormError
 export function sessionFormValuesToPayload(
   values: SessionFormValues
 ): { name: string; duration: number; energy: number; note: string; date: string } {
-  const dateIso = new Date(values.date.trim()).toISOString().slice(0, 10);
+  const dateIso = new Date(`${values.date.trim()}T00:00:00`).toISOString();
   return {
     name: values.name.trim(),
     duration: parseInt(values.duration.trim(), 10),
