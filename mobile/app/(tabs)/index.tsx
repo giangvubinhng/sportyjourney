@@ -41,7 +41,7 @@ function SessionCard({
 }) {
   return (
     <Box
-      style={{ backgroundColor: colors.cardBackground, borderColor: colors.cardBorder, borderRadius: 16 }}>
+      style={{ backgroundColor: colors.cardBackground, borderColor: colors.cardBorder, borderRadius: 16, padding: 16 }}>
       <Box style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Text bold size="md" style={{ color: colors.text }}>
           {session.name || formatSessionDate(session.date)}
@@ -70,6 +70,25 @@ function SessionCard({
   );
 }
 
+function getWeeklyStats(list: SessionRecord[]) {
+  const now = new Date();
+  const startOfWeek = new Date(now);
+  const day = startOfWeek.getDay();
+  const diffToMonday = (day + 6) % 7;
+  startOfWeek.setDate(startOfWeek.getDate() - diffToMonday);
+  startOfWeek.setHours(0, 0, 0, 0);
+
+  const weeklySessions = list.filter((s) => {
+    const d = s.date ? new Date(s.date) : null;
+    if (!d || Number.isNaN(d.getTime())) return false;
+    return d >= startOfWeek;
+  });
+
+  const hours = weeklySessions.reduce((total, s) => total + (s.duration ?? 0) / 60, 0);
+
+  return { sessions: weeklySessions.length, hours };
+}
+
 export default function HomeScreen() {
   const router = useRouter();
   const colorScheme = useColorScheme() ?? 'light';
@@ -78,6 +97,8 @@ export default function HomeScreen() {
   const [sessions, setSessions] = useState<SessionRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+
+  const { sessions: weeklySessions, hours: weeklyHours } = getWeeklyStats(sessions);
 
   const loadSessions = useCallback(async () => {
     try {
@@ -105,52 +126,96 @@ export default function HomeScreen() {
 
   return (
     <ScreenLayout title="Home">
-    <ScrollView
-      contentContainerStyle={{ flexGrow: 1 }}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.tint} />
-      }>
-      <Box style={{ flex: 1, paddingHorizontal: 16, backgroundColor: colors.background }}>
-        <Box style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-          <VStack space="xs">
-            <Heading size="2xl" style={{ color: colors.text }}>
-              Hey, {user.name || user.username || 'there'}
-            </Heading>
-            <Text style={{ color: colors.textMuted }}>Your recent BJJ sessions</Text>
-          </VStack>
-          <Button
-            size="sm"
-            variant="outline"
-            action="primary"
-            onPress={() => {
-              logout();
-              router.replace('/auth');
-            }}>
-            <ButtonText>Sign out</ButtonText>
-          </Button>
-        </Box>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.tint} />
+        }>
+        <Box style={{ flex: 1, paddingHorizontal: 16, backgroundColor: colors.background }}>
+          <Box style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+            <VStack space="xs">
+              <Heading size="2xl" style={{ color: colors.text }}>
+                Hey, {user.name || user.username || 'there'}
+              </Heading>
+            </VStack>
+            <Button
+              size="sm"
+              variant="outline"
+              action="primary"
+              onPress={() => {
+                logout();
+                router.replace('/auth');
+              }}>
+              <ButtonText>Sign out</ButtonText>
+            </Button>
+          </Box>
 
-        {loading ? (
-          <Box style={{ paddingVertical: 48, alignItems: 'center' }}>
-            <Text style={{ color: colors.textMuted }}>Loading sessions…</Text>
-          </Box>
-        ) : sessions.length === 0 ? (
           <Box
-            style={{ borderRadius: 16, borderWidth: 1, borderStyle: 'dashed', backgroundColor: colors.cardBackground, borderColor: colors.cardBorder }}>
-            <IconSymbol name="calendar.badge.plus" size={48} color={colors.textMuted} />
-            <Text style={{ marginTop: 16, textAlign: 'center', color: colors.textMuted }}>
-              No sessions yet. Add your first one from the Add Session tab.
+            style={{
+              backgroundColor: colors.cardBackground,
+              borderColor: colors.cardBorder,
+              borderWidth: 1,
+              borderRadius: 16,
+              padding: 16,
+              marginBottom: 24,
+              gap: 12,
+            }}>
+            <Text bold size="md" style={{ color: colors.text }}>
+              This Week
             </Text>
+            <Box style={{ flexDirection: 'row', gap: 12 }}>
+              <Box
+                style={{
+                  flex: 1,
+                  borderColor: colors.cardBorder,
+                  gap: 4,
+                }}>
+                <Text bold size="2xl" style={{ color: colors.text }}>
+                  {weeklySessions}
+                </Text>
+                <Text size="md" style={{ color: colors.textMuted }}>
+                  Sessions
+                </Text>
+              </Box>
+              <Box
+                style={{
+                  flex: 1,
+                  borderColor: colors.cardBorder,
+                  gap: 4,
+                }}>
+                <Text bold size="2xl" style={{ color: colors.text }}>
+                  {weeklyHours.toFixed(1)}
+                </Text>
+                <Text size="md" style={{ color: colors.textMuted }}>
+                  Hours
+                </Text>
+              </Box>
+            </Box>
           </Box>
-        ) : (
-          <VStack space="md">
-            {sessions.map((session) => (
-              <SessionCard key={session.id} session={session} colors={colors} />
-            ))}
-          </VStack>
-        )}
-      </Box>
-    </ScrollView>
+
+          <Text style={{ color: colors.textMuted }}>Your recent BJJ sessions</Text>
+
+          {loading ? (
+            <Box style={{ paddingVertical: 48, alignItems: 'center' }}>
+              <Text style={{ color: colors.textMuted }}>Loading sessions…</Text>
+            </Box>
+          ) : sessions.length === 0 ? (
+            <Box
+              style={{ borderRadius: 16, borderWidth: 1, borderStyle: 'dashed', backgroundColor: colors.cardBackground, borderColor: colors.cardBorder }}>
+              <IconSymbol name="calendar.badge.plus" size={48} color={colors.textMuted} />
+              <Text style={{ marginTop: 16, textAlign: 'center', color: colors.textMuted }}>
+                No sessions yet. Add your first one from the Add Session tab.
+              </Text>
+            </Box>
+          ) : (
+            <VStack space="md">
+              {sessions.map((session) => (
+                <SessionCard key={session.id} session={session} colors={colors} />
+              ))}
+            </VStack>
+          )}
+        </Box>
+      </ScrollView>
 
     </ScreenLayout>
   );

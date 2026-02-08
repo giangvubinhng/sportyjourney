@@ -7,7 +7,9 @@ import (
     "github.com/pocketbase/pocketbase"
     "github.com/pocketbase/pocketbase/apis"
     "github.com/pocketbase/pocketbase/core"
-		"github.com/pocketbase/pocketbase/plugins/migratecmd"
+	"github.com/pocketbase/pocketbase/plugins/migratecmd"
+
+    _ "sportbook-api/migrations"
 )
 
 func main() {

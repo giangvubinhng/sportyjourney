@@ -8,7 +8,7 @@ import (
 func init() {
 	m.Register(func(app core.App) error {
 		// add up queries...
-		jsonData = `[
+		jsonData := `[
 			{
 					"id": "pbc_1092069950",
 					"listRule": "@request.auth.id = created_by.id",
