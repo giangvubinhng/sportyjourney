@@ -21,6 +21,8 @@ import {
 import { Textarea, TextareaInput } from '@/components/ui/textarea';
 import { Box } from '@/components/ui/box';
 import { Button, ButtonText } from '@/components/ui/button';
+import { HStack } from '@/components/ui/hstack';
+import { Pressable } from '@/components/ui/pressable';
 import { Spinner } from '@/components/ui/spinner';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
@@ -42,6 +44,13 @@ import {
 } from '@/lib/session-form';
 
 const SUBMIT_ERROR_FALLBACK = 'Something went wrong. Please try again.';
+const QUICK_TECHNIQUE_OPTIONS = [
+  'Guard passing',
+  'Submissions',
+  'Takedowns',
+  'Escapes',
+  'Sweep',
+];
 
 export default function AddSessionScreen() {
   const router = useRouter();
@@ -94,6 +103,15 @@ export default function AddSessionScreen() {
             }) => {
               const durationNum = parseInt(values.duration, 10) || 0;
               const energyNum = parseInt(values.energy, 10) || 0;
+              const appendTechnique = (technique: string) => {
+                const current = values.note || '';
+                const needsSeparator =
+                  current.length > 0 && !/\s$/.test(current);
+                setFieldValue(
+                  'note',
+                  `${current}${needsSeparator ? ', ' : ''}${technique}`
+                );
+              };
 
               return (
                 <VStack space="lg">
@@ -209,13 +227,43 @@ export default function AddSessionScreen() {
                       size="lg"
                       className="min-w-[200px] rounded-lg border-outline-300 min-h-[100px]">
                       <TextareaInput
-                        placeholder="Drilling, sparring, techniques…"
+                        placeholder="What did you work on today?"
                         value={values.note}
                         onChangeText={(v: string) => setFieldValue('note', v)}
                         onBlur={() => setFieldTouched('note')}
                         className="text-typography-900"
                       />
                     </Textarea>
+                  </FormControl>
+                  <FormControl>
+                    <FormControlLabel>
+                      <FormControlLabelText className="text-typography-900 font-medium">
+                        Quick add techniques
+                      </FormControlLabelText>
+                    </FormControlLabel>
+                    <HStack space="sm" className="flex-wrap mt-2">
+                      {QUICK_TECHNIQUE_OPTIONS.map((technique) => (
+                        <Pressable
+                          key={technique}
+                          onPress={() => appendTechnique(technique)}
+                          style={{
+                            paddingHorizontal: 12,
+                            paddingVertical: 8,
+                            borderRadius: 999,
+                            borderWidth: 1,
+                            borderColor: 'rgba(31, 163, 88, 0.35)',
+                            backgroundColor: 'rgba(31, 163, 88, 0.12)',
+                            marginBottom: 8,
+                          }}>
+                          <Text
+                            size="sm"
+                            className="text-typography-900"
+                            style={{ color: colors.tint, fontWeight: '600' }}>
+                            + {technique}
+                          </Text>
+                        </Pressable>
+                      ))}
+                    </HStack>
                   </FormControl>
 
                   {submitError && (
