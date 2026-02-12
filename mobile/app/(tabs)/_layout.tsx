@@ -41,6 +41,16 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="community"
+        options={{
+          title: 'Community',
+          tabBarButton: HapticTab,
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="globe.americas.fill" color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

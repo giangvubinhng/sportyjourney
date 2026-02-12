@@ -33,6 +33,12 @@ Start the development server:
 go run ./cmd/server/ serve
 ```
 
+### Migrate Data 
+(Optional)
+   ```bash
+   go run .\cmd\server\ migrate
+   ```  
+
 The server will start and be available at `http://127.0.0.1:8090` by default (PocketBase default port).
 
 ### 3. Build the Server

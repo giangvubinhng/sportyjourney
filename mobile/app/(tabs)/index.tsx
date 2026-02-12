@@ -41,7 +41,7 @@ function SessionCard({
 }) {
   return (
     <Box
-      style={{ backgroundColor: colors.cardBackground, borderColor: colors.cardBorder, borderRadius: 16, padding: 16 }}>
+      style={{ backgroundColor: colors.cardBackground, borderColor: colors.cardBorder, borderWidth: 1, borderRadius: 16, padding: 16 }}>
       <Box style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Text bold size="md" style={{ color: colors.text }}>
           {session.name || formatSessionDate(session.date)}
