@@ -30,7 +30,7 @@ This will ensure all dependencies listed in `go.mod` are downloaded and availabl
 Start the development server:
 
 ```bash
-go run ./cmd/server/ serve
+go run ./cmd/server/ serve --http=0.0.0.0:8090
 ```
 
 ### Migrate Data 
